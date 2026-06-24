@@ -42,5 +42,6 @@ Through this project, I improved my skills in:
 - Duration: Internship Project Phase
 
 ## Author
-Priyanshu Shakya
+parthesh Chakravarthy 
+parthesh448@gmail.com
 Computer Science Engineering Student
