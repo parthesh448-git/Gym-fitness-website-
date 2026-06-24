@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IRONFORGE | Elite Fitness</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:   #0A0A0A;
+      --charcoal:#111111;
+      --surface: #161616;
+      --border:  #222222;
+      --gold:    #C9A84C;
+      --gold-light: #E8C96A;
+      --white:   #F5F5F5;
+      --muted:   #888888;
+      --red:     #C0392B;
+      --ff-display: 'Bebas Neue', sans-serif;
+      --ff-body:    'Inter', sans-serif;
+      --ff-ui:      'Space Grotesk', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--ff-body);
+      overflow-x: hidden;
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+      padding: 20px 60px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s;
+    }
+    nav.scrolled { border-bottom-color: var(--border); }
+
+    .logo {
+      font-family: var(--ff-display);
+      font-size: 28px;
+      letter-spacing: 4px;
+      color: var(--white);
+    }
+    .logo span { color: var(--gold); }
+
+    .nav-links {
+      display: flex; gap: 36px; list-style: none;
+    }
+    .nav-links a {
+      font-family: var(--ff-ui);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+
+    .nav-cta {
+      background: var(--gold);
+      color: var(--black) !important;
+      padding: 10px 24px;
+      border-radius: 2px;
+      font-weight: 700 !important;
+      letter-spacing: 1px !important;
+    }
+    .nav-cta:hover { background: var(--gold-light) !important; }
+
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--white); transition: 0.3s; }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 120px 60px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(135deg, rgba(201,168,76,0.07) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 50%, rgba(201,168,76,0.10) 0%, transparent 60%);
+    }
+
+    /* animated gold orbs */
+    .hero-orb {
+      position: absolute; border-radius: 50%; pointer-events: none;
+      filter: blur(80px);
+    }
+    .hero-orb-1 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(201,168,76,0.13) 0%, transparent 70%);
+      top: -100px; right: -80px;
+      animation: orbFloat 8s ease-in-out infinite;
+    }
+    .hero-orb-2 {
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+      bottom: 60px; left: 10%;
+      animation: orbFloat 11s ease-in-out infinite reverse;
+    }
+    @keyframes orbFloat {
+      0%,100% { transform: translateY(0px) scale(1); }
+      50%      { transform: translateY(-30px) scale(1.05); }
+    }
+
+    .hero-grid-lines {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(201,168,76,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,168,76,0.05) 1px, transparent 1px);
+      background-size: 80px 80px;
+      mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+    }
+
+    /* gold shimmer line across hero top */
+    .hero-shimmer {
+      position: absolute; top: 0; left: 0; width: 100%; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      animation: shimmerSlide 4s ease-in-out infinite;
+    }
+    @keyframes shimmerSlide {
+      0%   { opacity: 0; transform: scaleX(0.3) translateX(-60%); }
+      50%  { opacity: 1; transform: scaleX(1) translateX(0%); }
+      100% { opacity: 0; transform: scaleX(0.3) translateX(60%); }
+    }
+
+    .hero-content { position: relative; z-index: 2; max-width: 800px; }
+
+    .hero-eyebrow {
+      font-family: var(--ff-ui);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 24px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block; width: 40px; height: 1px;
+      background: var(--gold);
+    }
+
+    .hero-headline {
+      font-family: var(--ff-display);
+      font-size: clamp(72px, 10vw, 140px);
+      line-height: 0.9;
+      letter-spacing: 2px;
+      color: var(--white);
+      margin-bottom: 32px;
+    }
+    .hero-headline em {
+      font-style: normal;
+      color: var(--gold);
+      -webkit-text-stroke: 0px;
+    }
+    .hero-headline .outline {
+      -webkit-text-stroke: 1px rgba(245,245,245,0.3);
+      color: transparent;
+    }
+
+    .hero-sub {
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--muted);
+      max-width: 480px;
+      margin-bottom: 48px;
+    }
+
+    .hero-actions { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--black);
+      padding: 16px 40px;
+      font-family: var(--ff-ui);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: background 0.2s, transform 0.2s;
+      display: inline-block;
+    }
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--white);
+      padding: 15px 40px;
+      font-family: var(--ff-ui);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      border-radius: 2px;
+      transition: border-color 0.2s, color 0.2s;
+      display: inline-block;
+    }
+    .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+    .hero-stats {
+      position: absolute; right: 60px; bottom: 80px;
+      display: flex; gap: 48px;
+    }
+    .stat-item { text-align: right; }
+    .stat-number {
+      font-family: var(--ff-display);
+      font-size: 48px;
+      color: var(--white);
+      line-height: 1;
+    }
+    .stat-label {
+      font-family: var(--ff-ui);
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* ── SECTION COMMON ── */
+    section { padding: 100px 60px; }
+    section:nth-child(even) { background: var(--charcoal); }
+
+    .section-tag {
+      font-family: var(--ff-ui);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .section-tag::before { content: ''; display: block; width: 30px; height: 1px; background: var(--gold); }
+
+    .section-title {
+      font-family: var(--ff-display);
+      font-size: clamp(42px, 6vw, 80px);
+      line-height: 0.95;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+    }
+
+    .section-sub {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 520px;
+      margin-bottom: 64px;
+    }
+
+    /* ── PROGRAMS ── */
+    .programs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+
+    .program-card {
+      background: var(--surface);
+      padding: 40px 36px;
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.3s;
+      group: true;
+    }
+    .program-card::before {
+      content: '';
+      position: absolute; bottom: 0; left: 0;
+      width: 100%; height: 2px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+    .program-card:hover { border-color: var(--gold); }
+    .program-card:hover::before { transform: scaleX(1); }
+
+    .program-icon {
+      font-size: 36px; margin-bottom: 24px;
+      display: block;
+    }
+    .program-name {
+      font-family: var(--ff-display);
+      font-size: 28px;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+      color: var(--white);
+    }
+    .program-desc {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+    .program-tag {
+      font-family: var(--ff-ui);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid var(--gold);
+      padding: 4px 12px;
+      border-radius: 2px;
+      display: inline-block;
+    }
+
+    /* ── TRAINERS ── */
+    .trainers-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+
+    .trainer-card {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+    }
+
+    .trainer-avatar {
+      width: 100%; aspect-ratio: 3/4;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--surface);
+      font-size: 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .trainer-avatar::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(10,10,10,0.9) 0%, transparent 50%);
+    }
+
+    .trainer-info {
+      padding: 20px 24px 24px;
+      background: var(--surface);
+    }
+    .trainer-name {
+      font-family: var(--ff-display);
+      font-size: 22px;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+    .trainer-role {
+      font-family: var(--ff-ui);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    .trainer-stats-row {
+      display: flex; gap: 16px;
+    }
+    .trainer-stat {
+      font-family: var(--ff-ui);
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .trainer-stat strong {
+      display: block;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    /* ── MEMBERSHIP ── */
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .plan-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 40px 36px;
+      border-radius: 2px;
+      position: relative;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+    .plan-card:hover { transform: translateY(-6px); border-color: var(--gold); }
+
+    .plan-card.featured {
+      border-color: var(--gold);
+      background: linear-gradient(135deg, #1a1600 0%, var(--surface) 100%);
+    }
+
+    .plan-badge {
+      position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+      background: var(--gold);
+      color: var(--black);
+      font-family: var(--ff-ui);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 5px 18px;
+      border-radius: 0 0 4px 4px;
+    }
+
+    .plan-name {
+      font-family: var(--ff-display);
+      font-size: 32px;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+    .plan-tagline {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 32px;
+    }
+    .plan-price {
+      font-family: var(--ff-display);
+      font-size: 64px;
+      line-height: 1;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+    .plan-price sup { font-size: 28px; vertical-align: top; margin-top: 12px; }
+    .plan-period {
+      font-size: 13px; color: var(--muted);
+      margin-bottom: 36px;
+    }
+    .plan-features { list-style: none; margin-bottom: 36px; }
+    .plan-features li {
+      font-size: 14px;
+      color: var(--white);
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .plan-features li::before { content: '✓'; color: var(--gold); font-weight: 700; }
+    .plan-features li.off { color: var(--muted); }
+    .plan-features li.off::before { content: '✕'; color: var(--border); }
+
+    /* ── BMI ── */
+    #bmi { background: var(--black); }
+
+    /* BMI → Join CTA button */
+    .bmi-join-btn {
+      display: none;
+      margin-top: 20px;
+      background: var(--gold);
+      color: var(--black);
+      border: none;
+      padding: 14px 32px;
+      font-family: var(--ff-ui);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 2px;
+      width: 100%;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .bmi-join-btn:hover { background: var(--gold-light); transform: translateY(-2px); }
+    .bmi-join-btn.visible { display: block; }
+
+    .bmi-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .bmi-form-group { margin-bottom: 24px; }
+    .bmi-form-group label {
+      display: block;
+      font-family: var(--ff-ui);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .bmi-input {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--white);
+      font-family: var(--ff-ui);
+      font-size: 16px;
+      padding: 14px 18px;
+      border-radius: 2px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .bmi-input:focus { border-color: var(--gold); }
+    .bmi-input::placeholder { color: var(--border); }
+
+    .unit-toggle {
+      display: flex;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .unit-btn {
+      flex: 1;
+      padding: 12px;
+      font-family: var(--ff-ui);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .unit-btn.active {
+      background: var(--gold);
+      color: var(--black);
+    }
+
+    .bmi-result-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 48px;
+      border-radius: 2px;
+      text-align: center;
+      min-height: 300px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .bmi-number {
+      font-family: var(--ff-display);
+      font-size: 96px;
+      line-height: 1;
+      color: var(--white);
+      transition: color 0.4s;
+    }
+    .bmi-category {
+      font-family: var(--ff-ui);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin: 12px 0 24px;
+      transition: color 0.4s;
+    }
+    .bmi-bar-track {
+      width: 100%;
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .bmi-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      width: 0%;
+      transition: width 0.6s ease, background 0.4s;
+    }
+    .bmi-range-labels {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--ff-ui);
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+    .bmi-tip {
+      margin-top: 24px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── TESTIMONIALS ── */
+    .testi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .testi-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 36px;
+      border-radius: 2px;
+      position: relative;
+    }
+    .testi-quote {
+      font-family: var(--ff-display);
+      font-size: 80px;
+      color: var(--gold);
+      line-height: 0.5;
+      margin-bottom: 20px;
+      opacity: 0.4;
+    }
+    .testi-text {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--white);
+      margin-bottom: 28px;
+    }
+    .testi-stars {
+      color: var(--gold);
+      font-size: 14px;
+      margin-bottom: 20px;
+      letter-spacing: 2px;
+    }
+    .testi-author {
+      display: flex; align-items: center; gap: 14px;
+    }
+    .testi-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--gold);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .testi-name {
+      font-family: var(--ff-ui);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--white);
+    }
+    .testi-since {
+      font-size: 12px; color: var(--muted);
+    }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--black); }
+
+    .contact-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 80px;
+    }
+    .contact-info-item {
+      display: flex; align-items: flex-start; gap: 16px;
+      margin-bottom: 36px;
+    }
+    .contact-icon {
+      width: 48px; height: 48px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+      border-radius: 2px;
+    }
+    .contact-info-label {
+      font-family: var(--ff-ui);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+    .contact-info-value {
+      font-size: 15px;
+      color: var(--white);
+      line-height: 1.5;
+    }
+
+    .contact-form { display: flex; flex-direction: column; gap: 16px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+    .form-label {
+      font-family: var(--ff-ui);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .form-input, .form-select, .form-textarea {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--white);
+      font-family: var(--ff-body);
+      font-size: 14px;
+      padding: 14px 18px;
+      border-radius: 2px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+    }
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(201,168,76,0.10);
+    }
+    .form-input.error, .form-select.error { border-color: #e74c3c !important; box-shadow: 0 0 0 3px rgba(231,76,60,0.10); }
+    .form-error-msg {
+      font-family: var(--ff-ui);
+      font-size: 11px;
+      color: #e74c3c;
+      margin-top: 5px;
+      display: none;
+    }
+    .form-error-msg.show { display: block; }
+    .form-input::placeholder,
+    .form-textarea::placeholder { color: #333; }
+    .form-select { appearance: none; cursor: pointer; }
+    .form-textarea { min-height: 120px; resize: vertical; }
+    .form-select option { background: var(--surface); }
+
+    .form-success {
+      display: none;
+      background: rgba(201,168,76,0.1);
+      border: 1px solid var(--gold);
+      padding: 16px 20px;
+      border-radius: 2px;
+      font-family: var(--ff-ui);
+      font-size: 14px;
+      color: var(--gold);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--charcoal);
+      border-top: 1px solid var(--border);
+      padding: 60px 60px 40px;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 48px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 40px;
+    }
+    .footer-brand p {
+      font-size: 14px; color: var(--muted);
+      line-height: 1.7; margin-top: 16px;
+      max-width: 260px;
+    }
+    .footer-col h4 {
+      font-family: var(--ff-ui);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 10px; }
+    .footer-col ul li a {
+      font-size: 14px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-col ul li a:hover { color: var(--white); }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── MOBILE MENU ── */
+    .mobile-nav {
+      display: none;
+      position: fixed; top: 70px; left: 0; width: 100%;
+      background: rgba(10,10,10,0.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 24px 30px;
+      z-index: 999;
+      flex-direction: column; gap: 20px;
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a {
+      font-family: var(--ff-ui);
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--white);
+      text-decoration: none;
+      letter-spacing: 1px;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      nav { padding: 18px 30px; }
+      section { padding: 80px 30px; }
+      .hero-stats { right: 30px; }
+      .programs-grid { grid-template-columns: 1fr 1fr; }
+      .trainers-grid { grid-template-columns: 1fr 1fr; }
+      .plans-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
+      .bmi-wrapper { grid-template-columns: 1fr; gap: 40px; }
+      .testi-grid { grid-template-columns: 1fr; }
+      .contact-wrapper { grid-template-columns: 1fr; gap: 40px; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+      #hero { padding: 120px 30px 160px; }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .hero-headline { font-size: clamp(52px, 14vw, 90px); }
+      .hero-stats { position: static; margin-top: 48px; display: flex; gap: 32px; }
+      .stat-item { text-align: left; }
+      .programs-grid { grid-template-columns: 1fr; }
+      .trainers-grid { grid-template-columns: 1fr 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav id="navbar">
+  <div class="logo">IRON<span>FORGE</span></div>
+  <ul class="nav-links">
+    <li><a href="#programs">Programs</a></li>
+    <li><a href="#trainers">Trainers</a></li>
+    <li><a href="#membership">Membership</a></li>
+    <li><a href="#bmi">BMI</a></li>
+    <li><a href="#testimonials">Results</a></li>
+    <li><a href="#contact" class="nav-cta">Join Now</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<div class="mobile-nav" id="mobileNav">
+  <a href="#programs" onclick="closeMobile()">Programs</a>
+  <a href="#trainers" onclick="closeMobile()">Trainers</a>
+  <a href="#membership" onclick="closeMobile()">Membership</a>
+  <a href="#bmi" onclick="closeMobile()">BMI</a>
+  <a href="#testimonials" onclick="closeMobile()">Results</a>
+  <a href="#contact" onclick="closeMobile()">Join Now</a>
+</div>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-shimmer"></div>
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-grid-lines"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Elite Fitness · Est. 2018</div>
+    <h1 class="hero-headline">
+      FORGE<br>
+      YOUR<br>
+      <em>IRON</em><br>
+      <span class="outline">BODY</span>
+    </h1>
+    <p class="hero-sub">Where discipline meets science. Train with the best coaches, follow elite programs, and transform your physique in Mathura's most advanced gym.</p>
+    <div class="hero-actions">
+      <a href="#membership" class="btn-primary">Start Training</a>
+      <a href="#programs" class="btn-ghost">View Programs</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-number">12+</div>
+      <div class="stat-label">Elite Coaches</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">3K+</div>
+      <div class="stat-label">Members</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">6</div>
+      <div class="stat-label">Years Strong</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PROGRAMS ── -->
+<section id="programs">
+  <div class="section-tag">What We Offer</div>
+  <h2 class="section-title">WORKOUT<br>PROGRAMS</h2>
+  <p class="section-sub">Structured training protocols designed by certified coaches for every fitness level — beginner to elite athlete.</p>
+  <div class="programs-grid reveal">
+    <div class="program-card">
+      <span class="program-icon">🏋️</span>
+      <div class="program-name">STRENGTH FORGE</div>
+      <p class="program-desc">Progressive overload training with compound lifts. Build raw power and muscle density over 12-week cycles.</p>
+      <span class="program-tag">Advanced</span>
+    </div>
+    <div class="program-card">
+      <span class="program-icon">🔥</span>
+      <div class="program-name">FAT TORCH</div>
+      <p class="program-desc">High-intensity interval training combined with metabolic conditioning. Maximum calorie burn in minimum time.</p>
+      <span class="program-tag">All Levels</span>
+    </div>
+    <div class="program-card">
+      <span class="program-icon">⚡</span>
+      <div class="program-name">POWER CIRCUIT</div>
+      <p class="program-desc">Explosive athletic training combining plyometrics, agility drills, and functional strength movements.</p>
+      <span class="program-tag">Intermediate</span>
+    </div>
+    <div class="program-card">
+      <span class="program-icon">🧘</span>
+      <div class="program-name">FLEX & FLOW</div>
+      <p class="program-desc">Mobility, flexibility, and mindful movement. Perfect for recovery days or as a standalone wellness practice.</p>
+      <span class="program-tag">Beginner</span>
+    </div>
+    <div class="program-card">
+      <span class="program-icon">🥊</span>
+      <div class="program-name">COMBAT FIT</div>
+      <p class="program-desc">Boxing-inspired cardio and self-defense fundamentals. Build coordination, endurance, and confidence.</p>
+      <span class="program-tag">All Levels</span>
+    </div>
+    <div class="program-card">
+      <span class="program-icon">🏃</span>
+      <div class="program-name">CARDIO ELITE</div>
+      <p class="program-desc">Endurance building program combining steady-state and interval runs with cross-training for peak stamina.</p>
+      <span class="program-tag">Intermediate</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── TRAINERS ── -->
+<section id="trainers">
+  <div class="section-tag">Our Team</div>
+  <h2 class="section-title">ELITE<br>TRAINERS</h2>
+  <p class="section-sub">Certified professionals who've competed, won, and are now dedicated to transforming your performance.</p>
+  <div class="trainers-grid reveal">
+    <div class="trainer-card">
+      <div class="trainer-avatar">💪</div>
+      <div class="trainer-info">
+        <div class="trainer-name">ARJUN SINGH</div>
+        <div class="trainer-role">Strength & Powerlifting</div>
+        <div class="trainer-stats-row">
+          <div class="trainer-stat"><strong>8+</strong>Yrs Exp</div>
+          <div class="trainer-stat"><strong>200+</strong>Clients</div>
+          <div class="trainer-stat"><strong>NSCA</strong>Certified</div>
+        </div>
+      </div>
+    </div>
+    <div class="trainer-card">
+      <div class="trainer-avatar">🏆</div>
+      <div class="trainer-info">
+        <div class="trainer-name">PRIYA MEHTA</div>
+        <div class="trainer-role">HIIT & Nutrition</div>
+        <div class="trainer-stats-row">
+          <div class="trainer-stat"><strong>6+</strong>Yrs Exp</div>
+          <div class="trainer-stat"><strong>150+</strong>Clients</div>
+          <div class="trainer-stat"><strong>ACE</strong>Certified</div>
+        </div>
+      </div>
+    </div>
+    <div class="trainer-card">
+      <div class="trainer-avatar">⚡</div>
+      <div class="trainer-info">
+        <div class="trainer-name">RAHUL VERMA</div>
+        <div class="trainer-role">Athletic Performance</div>
+        <div class="trainer-stats-row">
+          <div class="trainer-stat"><strong>10+</strong>Yrs Exp</div>
+          <div class="trainer-stat"><strong>300+</strong>Clients</div>
+          <div class="trainer-stat"><strong>CSCS</strong>Certified</div>
+        </div>
+      </div>
+    </div>
+    <div class="trainer-card">
+      <div class="trainer-avatar">🧘</div>
+      <div class="trainer-info">
+        <div class="trainer-name">SNEHA RAO</div>
+        <div class="trainer-role">Yoga & Mobility</div>
+        <div class="trainer-stats-row">
+          <div class="trainer-stat"><strong>5+</strong>Yrs Exp</div>
+          <div class="trainer-stat"><strong>120+</strong>Clients</div>
+          <div class="trainer-stat"><strong>RYT</strong>Certified</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── MEMBERSHIP ── -->
+<section id="membership">
+  <div class="section-tag">Membership Plans</div>
+  <h2 class="section-title">CHOOSE YOUR<br>LEVEL</h2>
+  <p class="section-sub">Transparent pricing. No hidden fees. Cancel anytime. Every plan includes access to our world-class facility.</p>
+  <div class="plans-grid reveal">
+    <!-- STARTER -->
+    <div class="plan-card">
+      <div class="plan-name">STARTER</div>
+      <div class="plan-tagline">Perfect for beginners</div>
+      <div class="plan-price"><sup>₹</sup>1,499</div>
+      <div class="plan-period">per month</div>
+      <ul class="plan-features">
+        <li>Full Gym Access</li>
+        <li>Locker Room</li>
+        <li>Group Classes (2/week)</li>
+        <li>Fitness Assessment</li>
+        <li class="off">Personal Training</li>
+        <li class="off">Nutrition Plan</li>
+        <li class="off">Priority Booking</li>
+      </ul>
+      <a href="#contact" class="btn-ghost" style="width:100%; text-align:center;">Get Started</a>
+    </div>
+    <!-- PRO -->
+    <div class="plan-card featured">
+      <div class="plan-badge">Most Popular</div>
+      <div class="plan-name">PRO</div>
+      <div class="plan-tagline">For serious athletes</div>
+      <div class="plan-price"><sup>₹</sup>2,999</div>
+      <div class="plan-period">per month</div>
+      <ul class="plan-features">
+        <li>Full Gym Access</li>
+        <li>Locker Room + Sauna</li>
+        <li>Unlimited Group Classes</li>
+        <li>Fitness Assessment</li>
+        <li>4 PT Sessions/Month</li>
+        <li>Basic Nutrition Plan</li>
+        <li class="off">Priority Booking</li>
+      </ul>
+      <a href="#contact" class="btn-primary" style="width:100%; text-align:center;">Join Pro</a>
+    </div>
+    <!-- ELITE -->
+    <div class="plan-card">
+      <div class="plan-name">ELITE</div>
+      <div class="plan-tagline">The complete package</div>
+      <div class="plan-price"><sup>₹</sup>4,999</div>
+      <div class="plan-period">per month</div>
+      <ul class="plan-features">
+        <li>Full Gym Access 24/7</li>
+        <li>Premium Locker + Spa</li>
+        <li>Unlimited Group Classes</li>
+        <li>Monthly Assessment</li>
+        <li>8 PT Sessions/Month</li>
+        <li>Custom Nutrition Plan</li>
+        <li>Priority Booking</li>
+      </ul>
+      <a href="#contact" class="btn-ghost" style="width:100%; text-align:center;">Go Elite</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── BMI CALCULATOR ── -->
+<section id="bmi">
+  <div class="section-tag">Health Tool</div>
+  <h2 class="section-title">BMI<br>CALCULATOR</h2>
+  <p class="section-sub">Know your Body Mass Index. Use this as a starting point to plan your fitness journey with our coaches.</p>
+  <div class="bmi-wrapper reveal">
+    <div>
+      <div class="unit-toggle">
+        <button class="unit-btn active" id="btnMetric" onclick="setUnit('metric')">Metric (kg/cm)</button>
+        <button class="unit-btn" id="btnImperial" onclick="setUnit('imperial')">Imperial (lb/in)</button>
+      </div>
+      <div class="bmi-form-group">
+        <label id="weightLabel">Weight (kg)</label>
+        <input class="bmi-input" type="number" id="weight" placeholder="e.g. 70" min="1"/>
+      </div>
+      <div class="bmi-form-group">
+        <label id="heightLabel">Height (cm)</label>
+        <input class="bmi-input" type="number" id="height" placeholder="e.g. 175" min="1"/>
+      </div>
+      <button class="btn-primary" onclick="calcBMI()" style="width:100%; text-align:center;">Calculate BMI</button>
+    </div>
+    <div class="bmi-result-box" id="bmiResult">
+      <div class="bmi-number" id="bmiNum">—</div>
+      <div class="bmi-category" id="bmiCat" style="color: var(--muted);">Enter your details</div>
+      <div class="bmi-bar-track" style="width:100%">
+        <div class="bmi-bar-fill" id="bmiBar"></div>
+      </div>
+      <div class="bmi-range-labels">
+        <span>Underweight</span>
+        <span>Normal</span>
+        <span>Overweight</span>
+        <span>Obese</span>
+      </div>
+      <p class="bmi-tip" id="bmiTip">Your BMI helps our coaches design a personalized program for you.</p>
+      <button class="bmi-join-btn" id="bmiJoinBtn" onclick="scrollToJoin()">
+        📋 Get My Custom Plan →
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ── TESTIMONIALS ── -->
+<section id="testimonials">
+  <div class="section-tag">Member Results</div>
+  <h2 class="section-title">REAL<br>TRANSFORMATIONS</h2>
+  <p class="section-sub">Thousands of members have changed their lives at IronForge. Here's what they have to say.</p>
+  <div class="testi-grid reveal">
+    <div class="testi-card">
+      <div class="testi-quote">"</div>
+      <p class="testi-text">Lost 18kg in 5 months. Arjun's strength program literally rewired how I think about fitness. Best investment I've ever made in myself.</p>
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-author">
+        <div class="testi-avatar">🏋️</div>
+        <div>
+          <div class="testi-name">Vikram Sharma</div>
+          <div class="testi-since">Member since 2023</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-quote">"</div>
+      <p class="testi-text">Priya's HIIT sessions are intense but the nutrition plan made the biggest difference. Down 2 dress sizes and stronger than ever.</p>
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-author">
+        <div class="testi-avatar">💪</div>
+        <div>
+          <div class="testi-name">Anjali Gupta</div>
+          <div class="testi-since">Member since 2024</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-quote">"</div>
+      <p class="testi-text">Went from barely benching 40kg to 100kg in 8 months. The community here pushes you harder than you'd ever push yourself.</p>
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-author">
+        <div class="testi-avatar">⚡</div>
+        <div>
+          <div class="testi-name">Rohan Agarwal</div>
+          <div class="testi-since">Member since 2022</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section id="contact">
+  <div class="section-tag">Get In Touch</div>
+  <h2 class="section-title">START YOUR<br>JOURNEY</h2>
+  <p class="section-sub">Ready to transform? Fill in the form and our team will get back to you within 24 hours to plan your first session.</p>
+  <div class="contact-wrapper reveal">
+    <div>
+      <div class="contact-info-item">
+        <div class="contact-icon">📍</div>
+        <div>
+          <div class="contact-info-label">Location</div>
+          <div class="contact-info-value">Near Krishnajanmabhoomi, Mathura, UP 281001</div>
+        </div>
+      </div>
+      <div class="contact-info-item">
+        <div class="contact-icon">📞</div>
+        <div>
+          <div class="contact-info-label">Phone</div>
+          <div class="contact-info-value">+91 98765 43210</div>
+        </div>
+      </div>
+      <div class="contact-info-item">
+        <div class="contact-icon">⏰</div>
+        <div>
+          <div class="contact-info-label">Hours</div>
+          <div class="contact-info-value">Mon–Sat: 5:00 AM – 10:00 PM<br>Sunday: 7:00 AM – 6:00 PM</div>
+        </div>
+      </div>
+      <div class="contact-info-item">
+        <div class="contact-icon">✉️</div>
+        <div>
+          <div class="contact-info-label">Email</div>
+          <div class="contact-info-value">info@ironforge.in</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="contact-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">First Name <span style="color:var(--gold)">*</span></label>
+            <input class="form-input" type="text" placeholder="Rahul" id="fname" oninput="clearError('fname')"/>
+            <div class="form-error-msg" id="err-fname">First name is required</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Last Name</label>
+            <input class="form-input" type="text" placeholder="Sharma" id="lname"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email <span style="color:var(--gold)">*</span></label>
+          <input class="form-input" type="email" placeholder="rahul@email.com" id="email" oninput="clearError('email')"/>
+          <div class="form-error-msg" id="err-email">Valid email is required</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phone <span style="color:var(--gold)">*</span></label>
+          <input class="form-input" type="tel" placeholder="+91 00000 00000" id="phone" oninput="clearError('phone')"/>
+          <div class="form-error-msg" id="err-phone">Phone number is required</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Interested In</label>
+          <select class="form-select" id="interest">
+            <option value="">Select a program...</option>
+            <option>Strength Forge</option>
+            <option>Fat Torch</option>
+            <option>Power Circuit</option>
+            <option>Flex & Flow</option>
+            <option>Combat Fit</option>
+            <option>Personal Training</option>
+            <option>Membership Enquiry</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">BMI Result <span style="color:var(--muted);font-size:10px">(auto-filled)</span></label>
+          <input class="form-input" type="text" id="bmiAutoFill" placeholder="Calculate BMI above to auto-fill" readonly style="cursor:not-allowed; color:var(--gold);"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Message <span style="color:var(--muted);font-size:10px">(optional)</span></label>
+          <textarea class="form-textarea" placeholder="Tell us about your fitness goals..." id="message"></textarea>
+        </div>
+        <div class="form-success" id="formSuccess">
+          ✓ Message sent! Our team will contact you within 24 hours.
+        </div>
+        <button class="btn-primary" onclick="submitForm()" style="width:100%; text-align:center;">Send Message →</button>
+        <p style="font-size:11px; color:var(--muted); margin-top:10px; text-align:center;">
+          <span style="color:var(--gold)">*</span> Required fields
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="logo">IRON<span>FORGE</span></div>
+      <p>Mathura's premier fitness destination. Where elite athletes are built, one rep at a time.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Programs</h4>
+      <ul>
+        <li><a href="#programs">Strength Forge</a></li>
+        <li><a href="#programs">Fat Torch</a></li>
+        <li><a href="#programs">Power Circuit</a></li>
+        <li><a href="#programs">Flex & Flow</a></li>
+        <li><a href="#programs">Combat Fit</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#trainers">Our Trainers</a></li>
+        <li><a href="#membership">Membership</a></li>
+        <li><a href="#bmi">BMI Calculator</a></li>
+        <li><a href="#testimonials">Success Stories</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Follow Us</h4>
+      <ul>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">YouTube</a></li>
+        <li><a href="#">Facebook</a></li>
+        <li><a href="#">LinkedIn</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024 IronForge Gym. All rights reserved.</span>
+    <span>Made with 💪 in Mathura</span>
+  </div>
+</footer>
+
+<script>
+  /* ── NAVBAR SCROLL ── */
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+  });
+
+  /* ── MOBILE MENU ── */
+  document.getElementById('hamburger').addEventListener('click', () => {
+    document.getElementById('mobileNav').classList.toggle('open');
+  });
+  function closeMobile() {
+    document.getElementById('mobileNav').classList.remove('open');
+  }
+
+  /* ── SCROLL REVEAL ── */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  /* ── BMI CALCULATOR ── */
+  let unit = 'metric';
+
+  function setUnit(u) {
+    unit = u;
+    document.getElementById('btnMetric').classList.toggle('active', u === 'metric');
+    document.getElementById('btnImperial').classList.toggle('active', u === 'imperial');
+    document.getElementById('weightLabel').textContent = u === 'metric' ? 'Weight (kg)' : 'Weight (lbs)';
+    document.getElementById('heightLabel').textContent = u === 'metric' ? 'Height (cm)' : 'Height (inches)';
+    document.getElementById('weight').placeholder = u === 'metric' ? 'e.g. 70' : 'e.g. 155';
+    document.getElementById('height').placeholder = u === 'metric' ? 'e.g. 175' : 'e.g. 69';
+    resetBMI();
+  }
+
+  function resetBMI() {
+    document.getElementById('weight').value = '';
+    document.getElementById('height').value = '';
+    document.getElementById('bmiNum').textContent = '—';
+    document.getElementById('bmiCat').textContent = 'Enter your details';
+    document.getElementById('bmiCat').style.color = 'var(--muted)';
+    document.getElementById('bmiBar').style.width = '0%';
+    document.getElementById('bmiBar').style.background = 'var(--gold)';
+    document.getElementById('bmiTip').textContent = 'Your BMI helps our coaches design a personalized program for you.';
+  }
+
+  function calcBMI() {
+    const w = parseFloat(document.getElementById('weight').value);
+    const h = parseFloat(document.getElementById('height').value);
+    if (!w || !h || w <= 0 || h <= 0) {
+      document.getElementById('bmiCat').textContent = 'Please enter valid values';
+      document.getElementById('bmiCat').style.color = '#e74c3c';
+      return;
+    }
+
+    let bmi;
+    if (unit === 'metric') {
+      bmi = w / ((h / 100) ** 2);
+    } else {
+      bmi = (703 * w) / (h ** 2);
+    }
+    bmi = Math.round(bmi * 10) / 10;
+
+    let cat, color, tip, pct, program;
+    if (bmi < 18.5) {
+      cat = 'UNDERWEIGHT'; color = '#3498db';
+      tip = 'Our nutrition team can build a calorie-surplus plan to help you gain healthy weight and muscle.';
+      pct = (bmi / 18.5) * 20;
+      program = 'Strength Forge';
+    } else if (bmi < 25) {
+      cat = 'NORMAL WEIGHT'; color = '#2ecc71';
+      tip = 'Great baseline! Our coaches can now focus on performance, strength, and body composition.';
+      pct = 20 + ((bmi - 18.5) / 6.5) * 30;
+      program = 'Power Circuit';
+    } else if (bmi < 30) {
+      cat = 'OVERWEIGHT'; color = '#f39c12';
+      tip = 'Our Fat Torch or HIIT programs combined with a nutrition plan will get you on track fast.';
+      pct = 50 + ((bmi - 25) / 5) * 30;
+      program = 'Fat Torch';
+    } else {
+      cat = 'OBESE'; color = '#e74c3c';
+      tip = 'Our coaches specialise in medically-guided weight loss programs. Start your consultation today.';
+      pct = Math.min(80 + ((bmi - 30) / 10) * 20, 100);
+      program = 'Personal Training';
+    }
+
+    document.getElementById('bmiNum').textContent = bmi;
+    document.getElementById('bmiNum').style.color = color;
+    document.getElementById('bmiCat').textContent = cat;
+    document.getElementById('bmiCat').style.color = color;
+    document.getElementById('bmiBar').style.width = pct + '%';
+    document.getElementById('bmiBar').style.background = color;
+    document.getElementById('bmiTip').textContent = tip;
+
+    /* ── Auto-fill contact form ── */
+    document.getElementById('bmiAutoFill').value = `BMI: ${bmi} — ${cat}`;
+    const sel = document.getElementById('interest');
+    for (let i = 0; i < sel.options.length; i++) {
+      if (sel.options[i].text === program) { sel.selectedIndex = i; break; }
+    }
+
+    /* Show Join button */
+    document.getElementById('bmiJoinBtn').classList.add('visible');
+  }
+
+  function scrollToJoin() {
+    document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  /* Enter key support for BMI */
+  ['weight','height'].forEach(id => {
+    document.getElementById(id).addEventListener('keypress', e => {
+      if (e.key === 'Enter') calcBMI();
+    });
+  });
+
+  /* ── CONTACT FORM ── */
+  function clearError(id) {
+    document.getElementById(id).classList.remove('error');
+    document.getElementById('err-' + id)?.classList.remove('show');
+  }
+
+  function showError(id, msg) {
+    const el = document.getElementById(id);
+    el.classList.add('error');
+    const err = document.getElementById('err-' + id);
+    if (err) { err.textContent = msg; err.classList.add('show'); }
+    return false;
+  }
+
+  function submitForm() {
+    let valid = true;
+    const fname = document.getElementById('fname').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+
+    if (!fname) { showError('fname', 'First name is required'); valid = false; }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showError('email', 'Please enter a valid email address'); valid = false;
+    }
+    if (!phone || phone.replace(/\D/g,'').length < 10) {
+      showError('phone', 'Please enter a valid 10-digit phone number'); valid = false;
+    }
+
+    if (!valid) return;
+
+    document.getElementById('formSuccess').style.display = 'block';
+    setTimeout(() => {
+      document.getElementById('formSuccess').style.display = 'none';
+    }, 5000);
+    ['fname','lname','email','phone','interest','message','bmiAutoFill'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = el.tagName === 'SELECT' ? '' : '';
+    });
+  }
+</script>
+</body>
+</html>
